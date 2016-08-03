@@ -24,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Username"
         android:id="@+id/tvUserame"
         android:layout_below="@+id/tvWelcomeMsg"
         android:layout_alignParentLeft="true"
@@ -40,4 +41,13 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gallbtn"
+        android:layout_below="@+id/etUsername"
+        android:background="@android:drawable/ic_menu_gallery"
+        android:minHeight="48dp"
+        android:minWidth="48dp" />
 </RelativeLayout>

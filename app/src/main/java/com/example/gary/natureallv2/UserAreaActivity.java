@@ -1,5 +1,6 @@
 package com.example.gary.natureallv2;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -14,5 +15,13 @@ public class UserAreaActivity extends AppCompatActivity {
 
         final EditText etUsername = (EditText)findViewById(R.id.etUsername);
         final TextView welcomeMsg = (TextView)findViewById(R.id.tvWelcomeMsg);
+
+        Intent intent = getIntent();
+        String firstname = intent.getStringExtra("firstname");
+        String username = intent.getStringExtra("username");
+
+        String message = firstname + " welcome to your user area";
+        welcomeMsg.setText(message);
+        etUsername.setText(username);
     }
 }
