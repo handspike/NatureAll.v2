@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -42,17 +44,34 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final String username = etUsername.getText().toString();
                 final String password = etPassword.getText().toString();
+
                 Response.Listener<String> responseListener = new Response.Listener<String>(){
                     @Override
                     public void onResponse(String response) {
+//                        int jsonStart = response.indexOf("{");
+//                        int jsonEnd =response.lastIndexOf("}");
+//
+//                        if (jsonStart >= 0 && jsonEnd >= 0 && jsonEnd > jsonStart) {
+//                            response = response.substring(jsonStart, jsonEnd + 1);
+//                        } else {
+//                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+//                            builder.setMessage("Login Failed through JSON")
+//                                    .setNegativeButton("Retry", null)
+//                                    .create()
+//                                    .show();
+//                        }
                         try {
+
                             JSONObject jsonResponse = new JSONObject(response);
+                           
                             boolean success = jsonResponse.getBoolean("success");
 
+
                             if (success){
-                            String firstname = jsonResponse.getString("firstname");
+                            String name = jsonResponse.getString("name");
+
                                 Intent intent = new Intent(LoginActivity.this, UserAreaActivity.class);
-                                intent.putExtra("firstname", firstname);
+                                intent.putExtra("name", name);
                                 intent.putExtra("username", username);
 
                                 LoginActivity.this.startActivity(intent);
@@ -77,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                 RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
                 queue.add(loginRequest);
             }
-        });
+        }); 
 
     }
 }

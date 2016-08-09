@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -32,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String firstname = etFirstName.getText().toString();
+                final String name = etFirstName.getText().toString();
                 final String surname = etSurname.getText().toString();
                 final String username = etUsername.getText().toString();
                 final String email = etEmailAddress.getText().toString();
@@ -49,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
                             if(success){
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 RegisterActivity.this.startActivity(intent);
+
                             }
                             else{
                                 AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
@@ -66,7 +68,8 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 };
 
-                RegisterRequest registerRequest = new RegisterRequest(firstname, surname, username, email, password, responseListener);
+
+                RegisterRequest registerRequest = new RegisterRequest(name, surname, username, email, password, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
                 queue.add(registerRequest);
 

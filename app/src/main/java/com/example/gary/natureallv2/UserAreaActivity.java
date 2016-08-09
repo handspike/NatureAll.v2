@@ -17,10 +17,10 @@ public class UserAreaActivity extends AppCompatActivity {
         final TextView welcomeMsg = (TextView)findViewById(R.id.tvWelcomeMsg);
 
         Intent intent = getIntent();
-        String firstname = intent.getStringExtra("firstname");
+        String name = intent.getStringExtra("name");
         String username = intent.getStringExtra("username");
 
-        String message = firstname + " welcome to your user area";
+        String message = name + " welcome to your user area";
         welcomeMsg.setText(message);
         etUsername.setText(username);
     }
