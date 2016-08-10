@@ -42,12 +42,14 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <ImageButton
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/gallbtn"
+        android:text="@string/btnGoToPicActivity"
+        android:id="@+id/btnGoToPicActivity"
         android:layout_below="@+id/etUsername"
-        android:background="@android:drawable/ic_menu_gallery"
-        android:minHeight="48dp"
-        android:minWidth="48dp" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="postAPictureBtnClicked" />
+
 </RelativeLayout>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.gary.natureallv2.CameraPicActivity">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnLaunchCamera"
+        android:id="@+id/btnLaunchCamera"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="btnFromCameraClicked" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnLaunchGallery"
+        android:id="@+id/btnLaunchGallery"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:id="@+id/ivPicSelected"
+        android:layout_below="@+id/btnLaunchCamera"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnUploadPic"
+        android:id="@+id/btnUploadPic"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tvLat"
+        android:id="@+id/tvLat"
+        android:layout_below="@+id/ivPicSelected"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/btnLaunchCamera"
+        android:layout_alignEnd="@+id/btnLaunchCamera" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tvLong"
+        android:id="@+id/tvLong"
+        android:layout_below="@+id/tvLat"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/btnUploadPic"
+        android:layout_toStartOf="@+id/btnUploadPic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/zeroValue"
+        android:id="@+id/tvLatValue"
+        android:layout_alignBottom="@+id/tvLat"
+        android:layout_toRightOf="@+id/tvLat"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/zeroValue"
+        android:id="@+id/tvLongValue"
+        android:layout_toRightOf="@+id/tvLat"
+        android:layout_toEndOf="@+id/tvLat"
+        android:layout_below="@+id/tvLat" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/tvDescription"
+        android:id="@+id/tvDescription"
+        android:layout_toLeftOf="@+id/etDecription"
+        android:layout_below="@+id/tvLong"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etDecription"
+        android:layout_alignTop="@+id/tvDescription"
+        android:layout_toRightOf="@+id/tvLong"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:hint="Say something here" />
+</RelativeLayout>
