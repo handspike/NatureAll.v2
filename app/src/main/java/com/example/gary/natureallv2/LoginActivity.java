@@ -48,18 +48,7 @@ public class LoginActivity extends AppCompatActivity {
                 Response.Listener<String> responseListener = new Response.Listener<String>(){
                     @Override
                     public void onResponse(String response) {
-//                        int jsonStart = response.indexOf("{");
-//                        int jsonEnd =response.lastIndexOf("}");
-//
-//                        if (jsonStart >= 0 && jsonEnd >= 0 && jsonEnd > jsonStart) {
-//                            response = response.substring(jsonStart, jsonEnd + 1);
-//                        } else {
-//                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-//                            builder.setMessage("Login Failed through JSON")
-//                                    .setNegativeButton("Retry", null)
-//                                    .create()
-//                                    .show();
-//                        }
+
                         try {
 
                             JSONObject jsonResponse = new JSONObject(response);

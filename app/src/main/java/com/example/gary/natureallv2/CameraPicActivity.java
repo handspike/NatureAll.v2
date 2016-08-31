@@ -5,38 +5,47 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.location.LocationManager;
+import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.Manifest;
 
+import java.io.File;
 
-import com.google.android.gms.common.ConnectionResult;
+
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
-import com.google.android.gms.location.LocationListener;
+
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CameraPicActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class CameraPicActivity extends AppCompatActivity {
 
+    public static String URL = "http://192.168.1.15/myDocs/mainProject/res/connection.php";
+    public static final String IMAGE_CAPTURE_FOLDER = "C:/xampp/htdocs/myDocs/mainProject/res/images/";
     public static final int CAMERA_REQUEST = 10;
     public static final int IMAGE_GALLERY_REQUEST = 20;
+    public static final int CAMERA_PIC_REQUEST = 2;
     private ImageView ivPicSelected;
     private FusedLocationProviderApi locationProviderApi = LocationServices.FusedLocationApi;
     private GoogleApiClient googleApiClient;
@@ -44,30 +53,104 @@ public class CameraPicActivity extends AppCompatActivity implements GoogleApiCli
     public final static int MILLISECONDS_PER_SECOND = 1000;
     public final static int MINUTE = 60 * MILLISECONDS_PER_SECOND;
     private static final int MY_PERMISSION_REQUEST_FINE_LOCATION = 101;
+    private static final int MY_PERMISSION_REQUEST_COARSE_LOCATION = 102;
     private boolean permissionIsGranted = false;
+    private TextView tvImageName;
     private TextView tvLatValue;
-    private TextView tvLongValue;
-
+    private TextView tvGPSCoords;
+    private double longitude;
+    private double latitude;
+    private String encoded_string, image_name;
+    private Bitmap bitmap;
+    private  File file;
+    private Uri file_uri;
+    private Uri _ImageFileUri;
+    private Button btnUploadPic;
+    private Button btnGetGps;
+    private Parcelable picUri;
+    private static String _bytes64String, _imgFileName;
+    private LocationManager locationManager;
+    private LocationListener listener;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_pic);
+        _imgFileName = String.valueOf(System.currentTimeMillis());
         ivPicSelected = (ImageView) findViewById(R.id.ivPicSelected);
-        tvLatValue = (TextView) findViewById(R.id.tvLatValue);
-        tvLongValue = (TextView) findViewById(R.id.tvLongValue);
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-        //initialise the location request with the accuracy and frequency with which we want location updates
-        locationRequest = new LocationRequest();
-        locationRequest.setInterval(MINUTE);
-        locationRequest.setFastestInterval(15 * MILLISECONDS_PER_SECOND);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        tvGPSCoords = (TextView) findViewById(R.id.tvLongValue);
+        btnUploadPic = (Button) findViewById(R.id.btnUploadPic);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        btnUploadPic.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                getFileUri();
+            }
+        });
+        btnGetGps = (Button)findViewById(R.id.btnGetGps);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+
+        listener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                tvGPSCoords.setText("");
+                tvGPSCoords.append(location.getLongitude() + " " + location.getLatitude());
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(i);
+            }
+        };
+
+        configure_button();
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case 10:
+                configure_button();
+                break;
+            default:
+                break;
+        }
+    }
+
+    void configure_button(){
+        // first check for permissions
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.INTERNET}
+                        ,10);
+            }
+            return;
+        }
+        // this code won't execute IF permissions are not allowed, because in the line above there is return statement.
+        btnGetGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //noinspection MissingPermission
+                locationManager.requestLocationUpdates("gps", 5000, 0, listener);
+            }
+        });
+    }
+
 
 
 
@@ -78,11 +161,11 @@ public class CameraPicActivity extends AppCompatActivity implements GoogleApiCli
      */
     public void btnFromCameraClicked(View view){
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);//
-//        String pictureName = getPictureName();//
-//        File imageFile = new File(pictureDirectory, pictureName);//
-//        Uri pictureUri = Uri.fromFile(imageFile);//
-//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,pictureUri);//
+        //File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);//
+        //String pictureName = getPictureName();//
+        //File imageFile = new File(pictureDirectory, pictureName);//
+        //Uri pictureUri = Uri.fromFile(imageFile);//
+        //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,pictureUri);//
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
 
     }
@@ -112,18 +195,41 @@ public class CameraPicActivity extends AppCompatActivity implements GoogleApiCli
         return "natureall" + timeStamp +".jpg";
     }
 
+    private void getFileUri() {
+        image_name = getPictureName();
+        file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                + File.separator + image_name);
+        file_uri = Uri.fromFile(file);
+
+
+
+    }
+
+//    public void onBtnUploadClick(View view){
+//        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        getFileUri();
+//        i.putExtra(MediaStore.EXTRA_OUTPUT, file_uri);
+//        startActivityForResult(i, 10);
+//        makeRequest();
+//
+//    }
+
+
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK){
-            if (requestCode == CAMERA_REQUEST){
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CAMERA_REQUEST) {
                 Bitmap cameraImage = (Bitmap) data.getExtras().get("data");
                 ivPicSelected.setImageBitmap(cameraImage);
 
 
             }
-            if (requestCode == IMAGE_GALLERY_REQUEST){
+            if (requestCode == IMAGE_GALLERY_REQUEST) {
                 Uri imageUri = data.getData();
                 //declare a stream to read the image data.
                 InputStream inputStream;
@@ -133,99 +239,83 @@ public class CameraPicActivity extends AppCompatActivity implements GoogleApiCli
                     Bitmap image = BitmapFactory.decodeStream(inputStream);
                     ivPicSelected.setImageBitmap(image);
                 } catch (FileNotFoundException e) {
-                    Toast.makeText(this, "Unable to open the image",Toast.LENGTH_LONG ).show();
+                    Toast.makeText(this, "Unable to open the image", Toast.LENGTH_LONG).show();
                 }
 
             }
-        }
-    }
 
 
-    @Override
-    public void onConnected(Bundle bundle){requestLocationUpdates();}
-
-    private void requestLocationUpdates(){
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSION_REQUEST_FINE_LOCATION);
-                }
-                return;
-            }
-        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-        }
-
-
-
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (permissionIsGranted) {
-            googleApiClient.connect();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (permissionIsGranted) {
-            googleApiClient.disconnect();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-            case MY_PERMISSION_REQUEST_FINE_LOCATION:
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    permissionIsGranted = true;
-                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
-                }
-                else{
-                    permissionIsGranted = false;
-                    Toast.makeText(getApplicationContext(), "This app requires location permissions to be granted", Toast.LENGTH_SHORT).show();
-                    tvLatValue.setText("Lat permission denied");
-                    tvLongValue.setText("Long permission denied");
-                }
-                break;
+//            if(requestCode == 10 && resultCode == RESULT_OK) {
+//                new Encode_image().execute();
+//            }
 
         }
     }
+/*Possible way to recover pics after saving to external storage*/
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//
+//
+//        outState.putParcelable("picUri", picUri);
+//    }
+//
+//    @Override
+//    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (permissionIsGranted){
-        if (googleApiClient.isConnected())
-            requestLocationUpdates();
-    }}
+//        picUri= savedInstanceState.getParcelable("picUri");
+
+//    }
+    /*End of/Possible way to recover pics after saving to external storage*/
+
+//    private class Encode_image extends AsyncTask<Void, Void, Void> {
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//            bitmap = BitmapFactory.decodeFile(file_uri.getPath());
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+//
+//            byte [] array = stream.toByteArray();
+//            encoded_string = Base64.encodeToString(array, 0);
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            makeRequest();
+//        }
+//    }
+
+//    private void makeRequest() {
+//        RequestQueue requestQueue = Volley.newRequestQueue(this);
+//        StringRequest request = new StringRequest(Request.Method.POST, "http://192.168.1.15/myDocs/mainProject/res/connection.php",
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//            }
+//        }){
+//            @Override
+//            protected Map<String, String> getParams ()throws AuthFailureError {
+//                HashMap<String, String> map = new HashMap<>();
+//                map.put("encoded_string", encoded_string);
+//                map.put("image_name", image_name);
+//                return map;
+//            }
+//
+//        };
+//        requestQueue.add(request);
+//    }
 
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if(permissionIsGranted) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
-        }
-    }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        if (permissionIsGranted){
-    Toast.makeText(this, "Location Changed:" + location.getLatitude() + " " + location.getLongitude(), Toast.LENGTH_LONG).show();
-    }
-    }
+
 
 }
 
