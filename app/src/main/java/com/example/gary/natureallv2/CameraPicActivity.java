@@ -157,6 +157,10 @@ public class CameraPicActivity extends AppCompatActivity {
         btnUploadPic.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                if (selectedPhoto == null ||selectedPhoto.equals("")){
+                    Toast.makeText(getApplicationContext(), "Please select an image.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 try {
                     Bitmap bitmap = ImageLoader.init().from(selectedPhoto).requestSize(1024, 1024).getBitmap();
                     String encodedImage = ImageBase64.encode(bitmap);
