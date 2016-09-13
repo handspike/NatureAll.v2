@@ -31,4 +31,10 @@ public class UserAreaActivity extends AppCompatActivity {
 
         startActivity(getCameraPic);
     }
+    public void searchAnimalButtonClicked(View view) {
+        Intent searchAnimal = new Intent(this, SearchAnimalActivity.class);
+        final int result = 1;
+
+        startActivity(searchAnimal);
+    }
 }

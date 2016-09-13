@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.gary.natureallv2.UserAreaActivity">
+    tools:context="com.example.gary.natureallv2.UserAreaActivity"
+    android:background="@mipmap/deercross">
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,9 +48,36 @@
         android:layout_height="wrap_content"
         android:text="@string/btnGoToPicActivity"
         android:id="@+id/btnGoToPicActivity"
+        android:onClick="postAPictureBtnClicked"
         android:layout_below="@+id/etUsername"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="postAPictureBtnClicked" />
+        android:layout_centerHorizontal="true"
+        android:background="@mipmap/dpm"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_search_animal"
+        android:id="@+id/btnSearchAnimal"
+        android:onClick="searchAnimalButtonClicked"
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@+id/btnGoToPicActivity"
+        android:layout_alignEnd="@+id/btnGoToPicActivity"
+        android:background="@mipmap/dpm"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_search_plant"
+        android:id="@+id/btnSearchPlant"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/btnGoToPicActivity"
+        android:layout_alignStart="@+id/btnGoToPicActivity"
+        android:layout_marginBottom="81dp"
+        android:onClick="btnSearchPlantClicked"
+        android:background="@mipmap/dpm"
+        android:textColor="#ffffff" />
+
 
 </RelativeLayout>

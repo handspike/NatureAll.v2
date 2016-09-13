@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.gary.natureallv2.RegisterActivity">
+    tools:context="com.example.gary.natureallv2.RegisterActivity"
+    android:background="@mipmap/deercross">
 
     <EditText
         android:layout_width="wrap_content"
@@ -18,60 +19,69 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:hint="Enter First Name Here" />
+        android:hint="Enter First Name Here"
+        android:background="#ffffff" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/etSurname"
+        android:hint="Enter Surname Here"
+        android:background="#ffffff"
         android:layout_below="@+id/etFirstName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_marginTop="50dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:hint="Enter Surname Here" />
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/etUsername"
+        android:hint="Enter a Username Here"
+        android:background="#ffffff"
+        android:layout_marginTop="42dp"
         android:layout_below="@+id/etSurname"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:hint="Enter a Username Here" />
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/etEmailAddress"
-        android:layout_below="@+id/etUsername"
+        android:hint="Enter your email Here"
+        android:background="#ffffff"
+        android:layout_above="@+id/btnRegister"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_marginBottom="68dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:hint="Enter your email Here" />
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/etPassword"
-        android:layout_below="@+id/etEmailAddress"
+        android:hint="Enter a Password"
+        android:background="#ffffff"
+        android:layout_below="@+id/etUsername"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_marginTop="52dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:hint="Enter a Password" />
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:text="@string/btn_register"
         android:id="@+id/btnRegister"
-        android:layout_below="@+id/etPassword"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginBottom="75dp"
+        android:background="@mipmap/dpm"
+        android:textColor="#ffffff"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

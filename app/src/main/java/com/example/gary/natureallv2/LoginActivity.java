@@ -17,7 +17,9 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
+/**
+ * Created by Gary on 03/08/2016.Go Me
+ */
 public class LoginActivity extends AppCompatActivity {
 
     @Override
@@ -42,27 +44,31 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+
+                //declare strings
                 final String username = etUsername.getText().toString();
                 final String password = etPassword.getText().toString();
+
 
                 Response.Listener<String> responseListener = new Response.Listener<String>(){
                     @Override
                     public void onResponse(String response) {
 
                         try {
-
+//create JSON object
                             JSONObject jsonResponse = new JSONObject(response);
 
                             boolean success = jsonResponse.getBoolean("success");
-
+//if success get value of the json.response "name" and assign it to string name
 
                             if (success){
                             String name = jsonResponse.getString("name");
-
+//declare a new intent
                                 Intent intent = new Intent(LoginActivity.this, UserAreaActivity.class);
+                                //put extras name and username in
                                 intent.putExtra("name", name);
                                 intent.putExtra("username", username);
-
+//start LoginActivity
                                 LoginActivity.this.startActivity(intent);
                             }
                             else{
@@ -80,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     }
                 };
-
+//calling the LoginRequest
                 LoginRequest loginRequest = new LoginRequest(username, password, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
                 queue.add(loginRequest);
