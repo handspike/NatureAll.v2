@@ -19,11 +19,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-
 /**
  * Created by Gary on 12/09/2016.Go Me
  */
-public class SearchAnimalActivity extends AppCompatActivity{
+public class SearchPlantActivity extends AppCompatActivity{
 
 
 
@@ -31,7 +30,7 @@ public class SearchAnimalActivity extends AppCompatActivity{
         String commonname;
         Button btnSearch;
         RequestQueue requestQueue;
-        String showUrl = "http://192.168.1.10/myDocs/mainProject/search_animal_and.php";
+        String showUrl = "http://192.168.1.10/myDocs/mainProject/search_plant_and.php";
         TextView tvName;
         TextView tvLatinName;
         TextView tvDescription;
@@ -65,13 +64,13 @@ public class SearchAnimalActivity extends AppCompatActivity{
                             System.out.println(response.toString());
 
                             try {
-                                JSONArray animals = response.getJSONArray("animals");
-                                for (int i = 0; i < animals.length(); i++) {
-                                    JSONObject animal = animals.getJSONObject(i);
+                                JSONArray plant = response.getJSONArray("plants");
+                                for (int i = 0; i < plant.length(); i++) {
+                                    JSONObject plants = plant.getJSONObject(i);
 //Change here for different string names
-                                    String name = animal.getString("name");
-                                    String latinName = animal.getString("latinName");
-                                    String description = animal.getString("description");
+                                    String name = plants.getString("name");
+                                    String latinName = plants.getString("latinName");
+                                    String description = plants.getString("description");
 
                                     tvName.setText(name);
                                     tvLatinName.setText(latinName);

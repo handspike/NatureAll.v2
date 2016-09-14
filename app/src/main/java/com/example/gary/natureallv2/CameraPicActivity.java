@@ -67,7 +67,7 @@ import java.util.Map;
 public class CameraPicActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getName();
     private static final int IMAGE_PERMISSION_REQUEST_CODE = 12;
-    public static String URL = "http://192.168.1.15/myDocs/mainProject/res/connection.php";
+    public static String URL = "http://192.168.1.10/myDocs/mainProject/res/connection.php";
     public static final String IMAGE_CAPTURE_FOLDER = "C:/xampp/htdocs/myDocs/mainProject/res/images/";
     public static final int LOCATION_REQUEST_CODE = 10;
     public static final int IMAGE_GALLERY_REQUEST = 20;
@@ -312,41 +312,7 @@ public class CameraPicActivity extends AppCompatActivity {
 
 
 
-//06 Sep 'working...'
 
-//  Temporary comment out while trying other code for camera click
-//    /**
-//     * Method called when btnFromCamera is clicked.
-//     * @param view
-//     */
-//    public void btnFromCameraClicked(View view) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-//                invokeCamera();
-//            } else {
-//                String[] permissionRequested = {Manifest.permission.CAMERA};
-//                requestPermissions(permissionRequested, CAMERA_PIC_REQUEST);
-//
-//            }
-//        }
-//
-//    }
-//
-//    /**
-//     * Here the native device camera is called and the image saved to sd card
-//     */
-//    private void invokeCamera() {
-//        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        //05 Sep re allowing the u/m
-//        File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);//
-//        String pictureName = getPictureName();//
-//        File imageFile = new File(pictureDirectory, pictureName);//may need extra info here to ad gps
-//        Uri pictureUri = Uri.fromFile(imageFile);//
-//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,pictureUri);//
-//        //capturedImage = imageFile.getAbsolutePath();
-//        startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
-//
-//    }End of Temporary comment out
 
     /**
      * This method is invoked when the user presses the From Gallery button.
